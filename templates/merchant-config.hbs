@@ -1,0 +1,46 @@
+<div class="lst-cfg">
+  {{#unless ready}}<div class="lst-notice warn">O adaptador de moeda e quantidade ainda não está configurado. <a data-action="openAdapter">Configurar agora</a></div>{{/unless}}
+  <div class="lst-cfg-bar">
+    <button type="button" data-action="openShop"><i class="fa-solid fa-store"></i> Abrir loja</button>
+    <button type="button" data-action="openSheet"><i class="fa-solid fa-address-card"></i> Ficha original</button>
+    <button type="button" data-action="importSheet"><i class="fa-solid fa-boxes-stacked"></i> Importar itens da ficha</button>
+    <button type="button" data-action="openAdapter"><i class="fa-solid fa-coins"></i> Adaptador</button>
+  </div>
+  <fieldset><legend>Identidade</legend>
+    <div class="form-group"><label>Comércio ativo</label><input type="checkbox" name="shop.enabled" {{#if shop.enabled}}checked{{/if}}></div>
+    <div class="form-group"><label>Loja aberta</label><input type="checkbox" name="shop.open" {{#if shop.open}}checked{{/if}}></div>
+    <div class="form-group"><label>Nome público</label><input type="text" name="shop.name" value="{{shop.name}}" maxlength="60" ></div>
+    <div class="form-group"><label>Descrição curta</label><textarea name="shop.description" rows="2" maxlength="300">{{shop.description}}</textarea></div>
+    <div class="form-group"><label>Retrato ou logo</label><div class="lst-file"><input type="text" name="shop.logo" value="{{shop.logo}}"><button type="button" data-action="pickLogo" aria-label="Escolher imagem"><i class="fa-solid fa-folder-open"></i></button></div></div>
+    <div class="form-group"><label>Banner (opcional)</label><div class="lst-file"><input type="text" name="shop.banner" value="{{shop.banner}}"><button type="button" data-action="pickBanner" aria-label="Escolher imagem"><i class="fa-solid fa-folder-open"></i></button></div></div>
+    <div class="form-group"><label>Cor de destaque</label><input type="color" name="shop.color" value="{{shop.color}}"></div>
+  </fieldset>
+  <fieldset><legend>Economia</legend>
+    <div class="form-group"><label>Preço cobrado do jogador (multiplicador)</label><input type="number" name="shop.buyMult" value="{{shop.buyMult}}" min="0" step="0.05"></div>
+    <div class="form-group"><label>Valor pago ao jogador (multiplicador)</label><input type="number" name="shop.sellMult" value="{{shop.sellMult}}" min="0" step="0.05"></div>
+    <p class="hint">Exemplo: valor base 100, cobrado 1,20 → o jogador paga 120; pago 0,50 → o jogador recebe 50.</p>
+    <div class="form-group"><label>Permitir compras do jogador</label><input type="checkbox" name="shop.allowBuy" {{#if shop.allowBuy}}checked{{/if}}></div>
+    <div class="form-group"><label>Permitir vendas do jogador</label><input type="checkbox" name="shop.allowSell" {{#if shop.allowSell}}checked{{/if}}></div>
+    <div class="form-group"><label>Dinheiro do mercador limitado</label><input type="checkbox" name="shop.limitedMoney" {{#if shop.limitedMoney}}checked{{/if}}></div>
+    {{#if balance}}<p class="hint">{{balance}}. O mercador usa a moeda da ficha do próprio ator.</p>{{/if}}
+  </fieldset>
+  <fieldset class="lst-drop"><legend>Produtos</legend>
+    <p class="hint">Use <b>Importar itens da ficha</b> ou arraste itens do diretório, de compêndios ou de inventários para cá. A loja guarda uma cópia.</p>
+    {{#each entries}}
+    <div class="lst-entry">
+      <div class="lst-entry-head">
+        <img src="{{img}}" alt=""><b>{{name}}</b><span class="lst-entry-price">Jogador paga: {{playerPrice}}</span>
+        <button type="button" data-action="pickIcon" data-id="{{id}}" title="Ícone da loja"><i class="fa-solid fa-image"></i></button>
+        {{#if hasIcon}}<button type="button" data-action="resetIcon" data-id="{{id}}" title="Voltar ao ícone original"><i class="fa-solid fa-rotate-left"></i></button>{{/if}}
+        <button type="button" data-action="removeEntry" data-id="{{id}}" title="Remover da loja"><i class="fa-solid fa-trash"></i></button>
+      </div>
+      <div class="lst-entry-fields">
+        <label>Ilimitado <input type="checkbox" name="catalog.{{id}}.unlimited" {{#if unlimited}}checked{{/if}}></label>
+        <label>Estoque <input type="number" name="catalog.{{id}}.stock" value="{{stock}}" min="0" step="1"></label>
+        <label>Preço base <input type="number" name="catalog.{{id}}.basePrice" value="{{basePrice}}" min="0" step="{{../step}}" placeholder="{{baseHint}}"></label>
+        <label>Preço final fixo <input type="number" name="catalog.{{id}}.finalPrice" value="{{finalPrice}}" min="0" step="{{../step}}" placeholder="usar multiplicador"></label>
+      </div>
+    </div>
+    {{else}}<p class="lst-none">Nenhum produto ainda.</p>{{/each}}
+  </fieldset>
+</div>

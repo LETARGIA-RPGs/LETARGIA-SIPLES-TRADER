@@ -1,0 +1,84 @@
+{{#if gone}}
+<div class="lst-empty"><i class="fa-solid fa-store-slash"></i><p>Este mercador não está mais disponível.</p></div>
+{{else}}
+<div class="lst-shell {{#if compact}}compact{{/if}}">
+  {{#if shop.banner}}<div class="lst-banner"><img src="{{shop.banner}}" alt=""></div>{{/if}}
+  {{#if notice}}<div class="lst-notice {{noticeKind}}" role="status">{{notice}}</div>{{/if}}
+  {{#unless shop.open}}<div class="lst-notice warn">A loja está fechada para os jogadores.</div>{{/unless}}
+  {{#if noBuyer}}
+  <div class="lst-empty"><i class="fa-solid fa-user-slash"></i>
+    <p>Você não tem um personagem para negociar.</p>
+    <p class="muted">Peça ao mestre para atribuir um personagem ao seu usuário ou dar a você a propriedade de um ator.</p></div>
+  {{else}}
+  <div class="lst-cols">
+    <section class="lst-col lst-shop">
+      <header class="lst-head">
+        <img class="lst-portrait" src="{{shop.logo}}" alt="">
+        <div class="lst-who"><span class="lst-kicker">Mercador</span><h2>{{shop.name}}</h2></div>
+      </header>
+      {{#if shop.description}}<p class="lst-desc">{{shop.description}}</p>{{/if}}
+      <div class="lst-tag buy"><i class="fa-solid fa-basket-shopping"></i> Você compra do mercador</div>
+      <input type="search" class="lst-search" data-list="shop" placeholder="Buscar produtos" value="{{search.shop}}">
+      <ul class="lst-list" data-scroll="shop">
+        {{#each shopRows}}
+        <li class="lst-row {{#if inCart}}selected{{/if}} {{#if blocked}}blocked{{/if}}" {{#unless blocked}}data-action="addBuy"{{/unless}} data-side="buy" data-list="shop" data-id="{{id}}" data-name="{{lname}}" tabindex="0" title="{{reason}}">
+          <img src="{{img}}" alt="">
+          <div class="lst-info"><span class="lst-name">{{name}}</span><span class="lst-sub">{{stockText}}{{#if inCart}} · {{inCart}} no resumo{{/if}}{{#if reason}} · {{reason}}{{/if}}</span></div>
+          <span class="lst-price">{{price}}</span>
+        </li>
+        {{else}}<li class="lst-none">Nenhum produto à venda.</li>{{/each}}
+      </ul>
+      {{#if isGM}}<footer class="lst-gm"><button type="button" data-action="openConfig"><i class="fa-solid fa-gear"></i> Configurar loja</button><button type="button" data-action="openSheet"><i class="fa-solid fa-address-card"></i> Ficha original</button></footer>{{/if}}
+    </section>
+
+    <section class="lst-col lst-mid">
+      <div class="lst-mode">{{mode}}</div>
+      <div class="lst-wallets">
+        <div><span class="lst-kicker">Seu saldo</span><b>{{wallet.me}}</b></div>
+        {{#if wallet.merchant}}<div><span class="lst-kicker">Saldo do mercador</span><b>{{wallet.merchant}}</b></div>{{/if}}
+      </div>
+      <div class="lst-cart" data-scroll="cart">
+        {{#if buyLines.length}}<h4>Comprando</h4><ul>
+          {{#each buyLines}}<li><img src="{{img}}" alt=""><span class="lst-name">{{name}}</span><span class="lst-qty"><button type="button" data-action="dec" data-side="buy" data-id="{{id}}" aria-label="Diminuir">−</button><b>{{qty}}</b><button type="button" data-action="inc" data-side="buy" data-id="{{id}}" aria-label="Aumentar">+</button></span><span class="lst-line">{{total}}</span><button type="button" class="lst-x" data-action="remove" data-side="buy" data-id="{{id}}" aria-label="Remover">✕</button></li>{{/each}}
+        </ul>{{/if}}
+        {{#if sellLines.length}}<h4>Vendendo</h4><ul>
+          {{#each sellLines}}<li><img src="{{img}}" alt=""><span class="lst-name">{{name}}</span><span class="lst-qty"><button type="button" data-action="dec" data-side="sell" data-id="{{id}}" aria-label="Diminuir">−</button><b>{{qty}}</b><button type="button" data-action="inc" data-side="sell" data-id="{{id}}" aria-label="Aumentar">+</button></span><span class="lst-line">{{total}}</span><button type="button" class="lst-x" data-action="remove" data-side="sell" data-id="{{id}}" aria-label="Remover">✕</button></li>{{/each}}
+        </ul>{{/if}}
+        {{#unless hasLines}}<p class="lst-none">Clique em um item para adicioná-lo. Clique direito remove uma unidade.</p>{{/unless}}
+      </div>
+      <div class="lst-totals">
+        <div><span>Compra</span><b>{{totals.buy}}</b></div>
+        <div><span>Venda</span><b>{{totals.sell}}</b></div>
+        <div class="net {{totals.netClass}}"><span>{{totals.netLabel}}</span><b>{{totals.net}}</b></div>
+      </div>
+      {{#each errors}}<p class="lst-error">{{this}}</p>{{/each}}
+      {{#unless gmOnline}}<p class="lst-error">O comércio exige um mestre conectado.</p>{{/unless}}
+      <div class="lst-actions">
+        <button type="button" class="ghost" data-action="clear">Limpar</button>
+        <button type="button" class="primary" data-action="confirm" {{#unless canConfirm}}disabled{{/unless}}>{{#if busy}}<i class="fa-solid fa-spinner fa-spin"></i> Processando…{{else}}Confirmar troca{{/if}}</button>
+      </div>
+    </section>
+
+    <section class="lst-col lst-me">
+      <header class="lst-head">
+        <img class="lst-portrait" src="{{buyer.img}}" alt="">
+        <div class="lst-who"><span class="lst-kicker">Seu personagem</span>
+          {{#if multipleBuyers}}<select class="lst-buyer">{{#each buyers}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select>{{else}}<h2>{{buyer.name}}</h2>{{/if}}
+        </div>
+      </header>
+      <div class="lst-tag sell"><i class="fa-solid fa-hand-holding-dollar"></i> Você vende ao mercador</div>
+      <input type="search" class="lst-search" data-list="me" placeholder="Buscar nos seus itens" value="{{search.me}}">
+      <ul class="lst-list" data-scroll="me">
+        {{#each myRows}}
+        <li class="lst-row {{#if inCart}}selected{{/if}} {{#if blocked}}blocked{{/if}}" {{#unless blocked}}data-action="addSell"{{/unless}} data-side="sell" data-list="me" data-id="{{id}}" data-name="{{lname}}" tabindex="0" title="{{reason}}">
+          <img src="{{img}}" alt="">
+          <div class="lst-info"><span class="lst-name">{{name}}</span><span class="lst-sub">Você tem {{qty}}{{#if inCart}} · {{inCart}} no resumo{{/if}}{{#if reason}} · {{reason}}{{/if}}</span></div>
+          <span class="lst-price">{{price}}</span>
+        </li>
+        {{else}}<li class="lst-none">Nenhum item seu pode ser vendido.</li>{{/each}}
+      </ul>
+    </section>
+  </div>
+  {{/if}}
+</div>
+{{/if}}

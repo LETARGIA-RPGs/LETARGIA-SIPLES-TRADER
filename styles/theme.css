@@ -1,0 +1,19 @@
+/* Variáveis de tema. Edite aqui para personalizar a aparência sem tocar na lógica. */
+:root {
+  --lst-bg: #14121a;
+  --lst-bg-2: #1c1923;
+  --lst-card: #25212f;
+  --lst-card-hover: #302a3d;
+  --lst-border: #3b3550;
+  --lst-text: #ece8f5;
+  --lst-muted: #9a93ad;
+  --lst-accent: #c9a227;
+  --lst-good: #6cc58a;
+  --lst-bad: #e8706a;
+  --lst-warn: #e2ae55;
+  --lst-radius: 8px;
+  --lst-gap: 10px;
+  --lst-icon: 40px;
+  --lst-font: "Signika", system-ui, sans-serif;
+  --lst-font-title: "Modesto Condensed", "Signika", serif;
+}

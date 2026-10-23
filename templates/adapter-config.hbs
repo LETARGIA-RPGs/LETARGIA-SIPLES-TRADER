@@ -1,0 +1,21 @@
+<div class="lst-cfg">
+  <p class="hint">Para sistemas em que o inventário são Itens do ator e a moeda é um único número. Não use com moedas em várias denominações ou campos calculados.</p>
+  <fieldset><legend>Moeda</legend>
+    <div class="form-group"><label>Nome da moeda</label><input type="text" name="currencyName" value="{{c.currencyName}}"></div>
+    <div class="form-group"><label>Símbolo (opcional)</label><input type="text" name="currencySymbol" value="{{c.currencySymbol}}"></div>
+    <div class="form-group"><label>Casas decimais (0 a 4)</label><input type="number" name="decimals" value="{{c.decimals}}" min="0" max="4" step="1"></div>
+    <p class="hint">Não altere a precisão depois de montar catálogos: preços guardados dependem dela.</p>
+    <div class="form-group"><label>Caminho do saldo no ator</label><input type="text" name="currencyPath" value="{{c.currencyPath}}" placeholder="system.currency.gp"></div>
+  </fieldset>
+  <fieldset><legend>Itens</legend>
+    <div class="form-group"><label>Caminho da quantidade no item</label><input type="text" name="quantityPath" value="{{c.quantityPath}}" placeholder="vazio = cada item vale 1 unidade"></div>
+    <p class="hint">Se o sistema não tem campo de quantidade, deixe vazio: cada item da ficha conta como 1 unidade e comprar N cria N cópias.</p>
+    <div class="form-group"><label>Caminho do preço no item (opcional)</label><input type="text" name="pricePath" value="{{c.pricePath}}" placeholder="system.price"></div>
+    <div class="form-group"><label>Tipos negociáveis (separados por vírgula; vazio = todos)</label><input type="text" name="eligibleTypes" value="{{c.eligibleTypes}}" placeholder="weapon, equipment, consumable"></div>
+  </fieldset>
+  <fieldset><legend>Diagnóstico</legend>
+    <div class="form-group"><label>Testar com</label><select name="diagActor"><option value="">(só validar caminhos)</option>{{#each actors}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    {{#if results}}<ul class="lst-diag">{{#each results}}<li class="{{level}}"><i class="fa-solid {{icon}}"></i> {{text}}</li>{{/each}}</ul>{{/if}}
+  </fieldset>
+  <footer class="lst-cfg-bar"><button type="button" data-action="diagnose"><i class="fa-solid fa-stethoscope"></i> Salvar e diagnosticar</button><button type="submit"><i class="fa-solid fa-floppy-disk"></i> Salvar</button></footer>
+</div>

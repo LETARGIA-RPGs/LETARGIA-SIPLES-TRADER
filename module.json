@@ -1,0 +1,11 @@
+{
+  "id": "letargia-simples-trader",
+  "title": "LETARGIA SIMPLES TRADER",
+  "description": "Mercadores simples para Foundry VTT 13: abra a loja pelo token, compre e venda com um resumo claro e confirmação processada pelo mestre.",
+  "version": "1.0.0",
+  "compatibility": { "minimum": "13" },
+  "authors": [{ "name": "Letargia" }],
+  "esmodules": ["scripts/main.js"],
+  "styles": ["styles/theme.css", "styles/trader.css"],
+  "socket": true
+}
